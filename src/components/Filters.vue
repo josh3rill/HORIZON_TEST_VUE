@@ -50,7 +50,7 @@ function updateFilter(field, value) {
         >
           <option value="">All Countries</option>
           <option v-for="opt in countries" :key="opt" :value="opt">
-            {{ opt }}
+            {{ opt.charAt(0).toUpperCase() + opt.slice(1) }}
           </option>
         </select>
       </div>
@@ -65,7 +65,7 @@ function updateFilter(field, value) {
         >
           <option value="">All Languages</option>
           <option v-for="opt in languages" :key="opt" :value="opt">
-            {{ opt }}
+            {{ opt.charAt(0).toUpperCase() + opt.slice(1) }}
           </option>
         </select>
       </div>
@@ -80,7 +80,7 @@ function updateFilter(field, value) {
         >
           <option value="">All Categories</option>
           <option v-for="opt in categories" :key="opt" :value="opt">
-            {{ opt }}
+            {{ opt.charAt(0).toUpperCase() + opt.slice(1) }}
           </option>
         </select>
       </div>

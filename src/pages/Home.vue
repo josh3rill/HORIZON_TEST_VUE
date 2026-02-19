@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import { fetchNews } from '../api/newsService.js'
+import { fetchNews, COUNTRY_CODES, LANGUAGE_CODES } from '../api/newsService.js'
 import Filters from '../components/Filters.vue'
 import NewsList from '../components/NewsList.vue'
 import Pagination from '../components/Pagination.vue'
@@ -66,8 +66,9 @@ async function loadNews() {
   try {
     const params = {}
 
-    if (filters.country) params.country = filters.country
-    if (filters.language) params.language = filters.language
+    // Translate display names to ISO codes expected by the API
+    if (filters.country) params.country = COUNTRY_CODES[filters.country] || filters.country
+    if (filters.language) params.language = LANGUAGE_CODES[filters.language] || filters.language
     if (filters.category) params.category = filters.category
 
     // Use the page token for the current page (cursor-based pagination)

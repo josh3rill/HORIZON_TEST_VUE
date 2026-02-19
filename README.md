@@ -1,40 +1,36 @@
 # HorizonNews
 
-A Vue 3 news reader application that fetches and displays the latest news from [Newsdata.io](https://newsdata.io/). Built as a component-based SPA with reactive filtering and pagination.
+A simple Vue 3 news app that pulls latest articles from the [Newsdata.io](https://newsdata.io/) API. You can filter by country, language, and category — the list updates reactively and is paginated using the API's cursor tokens.
 
-## Tech Stack
+## Stack
 
-- **Vue 3** — Composition API with `<script setup>`
-- **Vite** — Fast build tooling
-- **Tailwind CSS** — Utility-first styling
-- **JavaScript** (no TypeScript)
+- Vue 3 (Composition API, `<script setup>`)
+- Vite
+- Tailwind CSS
+- JavaScript (no TypeScript)
+- Vitest for tests
 
 ## Project Structure
 
 ```
 src/
 ├── api/
-│   └── newsService.js      # API service layer (native fetch)
+│   └── newsService.js       # Fetch wrapper for the newsdata.io API
 ├── components/
-│   ├── Filters.vue          # Country, language, category dropdowns
-│   ├── NewsCard.vue         # Individual article card
-│   ├── NewsList.vue         # Article grid with loading/error states
-│   └── Pagination.vue       # Prev/Next page navigation
+│   ├── Filters.vue           # Filter dropdowns (country, language, category)
+│   ├── NewsCard.vue          # Single article card
+│   ├── NewsList.vue          # Article grid + loading/error/empty states
+│   └── Pagination.vue        # Prev/Next navigation
 ├── pages/
-│   └── Home.vue             # Main page — orchestrates state & API calls
-├── App.vue                  # Root component with header
-├── main.js                  # App entry point
-└── style.css                # Tailwind CSS import
+│   └── Home.vue              # Main page — wires everything together
+├── App.vue                   # Shell with header and footer
+├── main.js                   # Entry point
+└── style.css                 # Tailwind import
 ```
 
-## Getting Started
+## Setup
 
-### Prerequisites
-
-- Node.js 18+
-- npm 9+
-
-### Installation
+You'll need Node 18+ and npm 9+.
 
 ```bash
 git clone https://github.com/josh3rill/HORIZON_TEST_VUE.git
@@ -42,56 +38,49 @@ cd HORIZON_TEST_VUE
 npm install
 ```
 
-### API Key
-
-The app uses a [Newsdata.io](https://newsdata.io/) API key, loaded via environment variables.
-
-1. Copy the example env file:
+Then set up your API key:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Open `.env` and replace the placeholder with your actual API key:
+Open `.env` and paste your key from [newsdata.io](https://newsdata.io/):
 
 ```
-VITE_NEWS_API_KEY=your_api_key_here
+VITE_NEWS_API_KEY=your_key_here
 ```
 
-You can register for a free key at [newsdata.io](https://newsdata.io/).
-
-### Run Development Server
+Run the dev server:
 
 ```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`.
+Open `http://localhost:5173`.
 
-### Build for Production
+To build for production:
 
 ```bash
 npm run build
-npm run preview
 ```
 
-## Features
+To run tests:
 
-- **Latest News Feed** — Fetches real-time news from the Newsdata.io API
-- **Reactive Filters** — Filter by country, language, and category. Filters trigger a fresh API call automatically
-- **Pagination** — Cursor-based pagination using the API's `nextPage` token with Prev/Next navigation
-- **Responsive Layout** — 1-column on mobile, 2 on tablet, 3 on desktop
-- **Error & Loading States** — Graceful handling of API failures and loading indicators
+```bash
+npm run test
+```
 
-## Design Decisions
+## How It Works
 
-- **Native `fetch`** over Axios — fewer dependencies, shows confidence with the platform
-- **No state management library** — reactive refs in a single page component are sufficient for this scope
-- **Unidirectional data flow** — Filters emit upward, parent controls state
-- **Cursor-based pagination** — follows the API's native pagination model via `nextPage` tokens
+- The app fetches news on load and whenever a filter changes (with a 300ms debounce to avoid spamming the API)
+- Filter dropdown options are built dynamically from the API response — they grow as you paginate through results
+- Pagination uses the `nextPage` cursor token from the API. I store a history of tokens so you can navigate back
+- If an article has no image, a fallback logo is shown. If the image URL is broken, it swaps to the fallback on error
+- I used native `fetch` instead of Axios to keep dependencies minimal
+- No Pinia/Vuex — `ref()` and `reactive()` in the parent component handle all the state needed here
 
 ## Known Limitations
 
-- The free API plan limits the number of requests and does not return full article content
-- Filter options are a curated subset of what the API supports — extendable by adding more options to `Filters.vue`
-- Tests omitted for brevity, but service logic and filter behavior would be tested in a production project
+- The free newsdata.io plan has rate limits and doesn't return full article content
+- Filter options depend on what the API returns — they populate as you browse, not from a separate endpoint
+- Tests cover the service layer only. In a real project I'd also test filter behavior and component rendering
