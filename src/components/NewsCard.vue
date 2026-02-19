@@ -1,5 +1,5 @@
 <script setup>
-import fallbackImage from '../assets/logo_hw.png'
+import fallbackImage from '../assets/logo_hw.png' 
 
 defineProps({
   article: {
