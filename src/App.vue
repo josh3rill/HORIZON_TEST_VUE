@@ -17,5 +17,10 @@ import logo from './assets/logo_hw.png'
     <main class="max-w-6xl mx-auto px-4 py-6">
       <Home />
     </main>
+    <footer class="bg-white border-t border-gray-200 mt-8">
+      <div class="max-w-6xl mx-auto px-4 py-4 text-center text-sm text-gray-500">
+        © 2026 Horizon News. All rights reserved.
+      </div>
+    </footer>
   </div>
 </template>
