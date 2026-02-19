@@ -1,4 +1,6 @@
 <script setup>
+import fallbackImage from '../assets/logo_hw.png'
+
 defineProps({
   article: {
     type: Object,
@@ -20,17 +22,23 @@ function formatDate(dateStr) {
     minute: '2-digit'
   })
 }
+
+/**
+ * On image load error, swap to the fallback image
+ */
+function onImageError(event) {
+  event.target.src = fallbackImage
+}
 </script>
 
 <template>
   <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
     <img
-      v-if="article.image_url"
-      :src="article.image_url"
+      :src="article.image_url || fallbackImage"
       :alt="article.title"
       class="w-full h-48 object-cover"
       loading="lazy"
-      @error="$event.target.style.display = 'none'"
+      @error="onImageError"
     />
     <div class="p-4">
       <div class="flex flex-wrap gap-2 mb-2">
