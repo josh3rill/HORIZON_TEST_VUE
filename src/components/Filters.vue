@@ -34,7 +34,8 @@ const countries = [
   { label: 'Nigeria', value: 'ng' },
   { label: 'Germany', value: 'de' },
   { label: 'France', value: 'fr' },
-  { label: 'Japan', value: 'jp' }
+  { label: 'Japan', value: 'jp' },
+  { label: 'Malta', value: 'mt' }
 ]
 
 const languages = [
@@ -47,7 +48,8 @@ const languages = [
   { label: 'Romanian', value: 'ro' },
   { label: 'Japanese', value: 'ja' },
   { label: 'Arabic', value: 'ar' },
-  { label: 'Hindi', value: 'hi' }
+  { label: 'Hindi', value: 'hi' },
+  { label: 'Maltese', value: 'mt' }
 ]
 
 const categories = [
