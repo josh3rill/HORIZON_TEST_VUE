@@ -61,7 +61,14 @@ watch(filters, () => {
   pageTokens.value = [null]
   nextPageToken.value = null
   loadNews()
-})
+}, { deep: true })
+
+/**
+ * Handle filter change from Filters component — directly mutate reactive object
+ */
+function onFilterChange(field, value) {
+  filters[field] = value
+}
 
 /**
  * Navigate to the next page
@@ -93,7 +100,12 @@ loadNews()
 
 <template>
   <div>
-    <Filters v-model="filters" />
+    <Filters
+      :country="filters.country"
+      :language="filters.language"
+      :category="filters.category"
+      @change="onFilterChange"
+    />
     <NewsList :articles="articles" :loading="loading" :error="error" />
     <Pagination
       :page="page"

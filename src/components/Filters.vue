@@ -1,21 +1,26 @@
 <script setup>
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true
+  country: {
+    type: String,
+    default: ''
+  },
+  language: {
+    type: String,
+    default: ''
+  },
+  category: {
+    type: String,
+    default: ''
   }
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['change'])
 
 /**
- * Update a single filter field and emit the new filters object
+ * Emit a change event with the updated field and value
  */
 function updateFilter(field, value) {
-  emit('update:modelValue', {
-    ...props.modelValue,
-    [field]: value
-  })
+  emit('change', field, value)
 }
 
 const countries = [
@@ -72,7 +77,7 @@ const categories = [
         <label for="country" class="block text-xs font-medium text-gray-500 mb-1">Country</label>
         <select
           id="country"
-          :value="modelValue.country"
+          :value="country"
           @change="updateFilter('country', $event.target.value)"
           class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
@@ -86,7 +91,7 @@ const categories = [
         <label for="language" class="block text-xs font-medium text-gray-500 mb-1">Language</label>
         <select
           id="language"
-          :value="modelValue.language"
+          :value="language"
           @change="updateFilter('language', $event.target.value)"
           class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
@@ -100,7 +105,7 @@ const categories = [
         <label for="category" class="block text-xs font-medium text-gray-500 mb-1">Category</label>
         <select
           id="category"
-          :value="modelValue.category"
+          :value="category"
           @change="updateFilter('category', $event.target.value)"
           class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
