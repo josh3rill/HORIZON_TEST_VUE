@@ -94,6 +94,7 @@ async function loadNews() {
  * When filters change, debounce then reset to page 1 and reload.
  * Debounce prevents rapid API calls when switching filters quickly.
  */
+
 watch(filters, () => {
   clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
@@ -101,7 +102,8 @@ watch(filters, () => {
     pageTokens.value = [null]
     nextPageToken.value = null
     loadNews()
-  }, 300)
+  }, 302) // 300ms debounce + small buffer
+
 }, { deep: true })
 
 /**
