@@ -11,6 +11,18 @@ const props = defineProps({
   category: {
     type: String,
     default: ''
+  },
+  countries: {
+    type: Array,
+    default: () => []
+  },
+  languages: {
+    type: Array,
+    default: () => []
+  },
+  categories: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -22,53 +34,6 @@ const emit = defineEmits(['change'])
 function updateFilter(field, value) {
   emit('change', field, value)
 }
-
-const countries = [
-  { label: 'All Countries', value: '' },
-  { label: 'Australia', value: 'au' },
-  { label: 'United States', value: 'us' },
-  { label: 'United Kingdom', value: 'gb' },
-  { label: 'Canada', value: 'ca' },
-  { label: 'India', value: 'in' },
-  { label: 'Pakistan', value: 'pk' },
-  { label: 'Nigeria', value: 'ng' },
-  { label: 'Germany', value: 'de' },
-  { label: 'France', value: 'fr' },
-  { label: 'Japan', value: 'jp' },
-  { label: 'Malta', value: 'mt' }
-]
-
-const languages = [
-  { label: 'All Languages', value: '' },
-  { label: 'English', value: 'en' },
-  { label: 'French', value: 'fr' },
-  { label: 'German', value: 'de' },
-  { label: 'Spanish', value: 'es' },
-  { label: 'Portuguese', value: 'pt' },
-  { label: 'Romanian', value: 'ro' },
-  { label: 'Japanese', value: 'ja' },
-  { label: 'Arabic', value: 'ar' },
-  { label: 'Hindi', value: 'hi' },
-  { label: 'Maltese', value: 'mt' }
-]
-
-const categories = [
-  { label: 'All Categories', value: '' },
-  { label: 'Top', value: 'top' },
-  { label: 'Business', value: 'business' },
-  { label: 'Crime', value: 'crime' },
-  { label: 'Education', value: 'education' },
-  { label: 'Entertainment', value: 'entertainment' },
-  { label: 'Environment', value: 'environment' },
-  { label: 'Health', value: 'health' },
-  { label: 'Lifestyle', value: 'lifestyle' },
-  { label: 'Politics', value: 'politics' },
-  { label: 'Science', value: 'science' },
-  { label: 'Sports', value: 'sports' },
-  { label: 'Technology', value: 'technology' },
-  { label: 'Tourism', value: 'tourism' },
-  { label: 'World', value: 'world' }
-]
 </script>
 
 <template>
@@ -83,8 +48,9 @@ const categories = [
           @change="updateFilter('country', $event.target.value)"
           class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option v-for="opt in countries" :key="opt.value" :value="opt.value">
-            {{ opt.label }}
+          <option value="">All Countries</option>
+          <option v-for="opt in countries" :key="opt" :value="opt">
+            {{ opt }}
           </option>
         </select>
       </div>
@@ -97,8 +63,9 @@ const categories = [
           @change="updateFilter('language', $event.target.value)"
           class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option v-for="opt in languages" :key="opt.value" :value="opt.value">
-            {{ opt.label }}
+          <option value="">All Languages</option>
+          <option v-for="opt in languages" :key="opt" :value="opt">
+            {{ opt }}
           </option>
         </select>
       </div>
@@ -111,8 +78,9 @@ const categories = [
           @change="updateFilter('category', $event.target.value)"
           class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option v-for="opt in categories" :key="opt.value" :value="opt.value">
-            {{ opt.label }}
+          <option value="">All Categories</option>
+          <option v-for="opt in categories" :key="opt" :value="opt">
+            {{ opt }}
           </option>
         </select>
       </div>

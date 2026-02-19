@@ -16,11 +16,45 @@ const nextPageToken = ref(null)
 // History of page tokens so we can go back
 const pageTokens = ref([null])
 
+// Dynamic filter options — populated from API responses
+const availableCountries = ref([])
+const availableLanguages = ref([])
+const availableCategories = ref([])
+
 const filters = reactive({
   country: '',
   language: '',
   category: ''
 })
+
+let debounceTimer = null
+
+/**
+ * Extract unique filter options from articles and merge with existing ones
+ */
+function updateFilterOptions(results) {
+  if (!results || !results.length) return
+
+  const countries = new Set(availableCountries.value)
+  const languages = new Set(availableLanguages.value)
+  const categories = new Set(availableCategories.value)
+
+  results.forEach((article) => {
+    if (article.country) {
+      article.country.forEach((c) => countries.add(c))
+    }
+    if (article.language) {
+      languages.add(article.language)
+    }
+    if (article.category) {
+      article.category.forEach((c) => categories.add(c))
+    }
+  })
+
+  availableCountries.value = [...countries].sort()
+  availableLanguages.value = [...languages].sort()
+  availableCategories.value = [...categories].sort()
+}
 
 /**
  * Load news from the API with current filters and page token
@@ -45,6 +79,9 @@ async function loadNews() {
     articles.value = data.results || []
     nextPageToken.value = data.nextPage || null
     hasNextPage.value = !!data.nextPage
+
+    // Build filter options dynamically from API data
+    updateFilterOptions(data.results)
   } catch (err) {
     error.value = err.message || 'Something went wrong fetching news.'
     articles.value = []
@@ -54,13 +91,17 @@ async function loadNews() {
 }
 
 /**
- * When filters change, reset to page 1 and reload
+ * When filters change, debounce then reset to page 1 and reload.
+ * Debounce prevents rapid API calls when switching filters quickly.
  */
 watch(filters, () => {
-  page.value = 1
-  pageTokens.value = [null]
-  nextPageToken.value = null
-  loadNews()
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => {
+    page.value = 1
+    pageTokens.value = [null]
+    nextPageToken.value = null
+    loadNews()
+  }, 300)
 }, { deep: true })
 
 /**
@@ -104,6 +145,9 @@ loadNews()
       :country="filters.country"
       :language="filters.language"
       :category="filters.category"
+      :countries="availableCountries"
+      :languages="availableLanguages"
+      :categories="availableCategories"
       @change="onFilterChange"
     />
     <NewsList :articles="articles" :loading="loading" :error="error" />
