@@ -1,5 +1,5 @@
 const BASE_URL = 'https://newsdata.io/api/1/latest'
-const API_KEY = 'pub_dc8a6b4d31484c219fb1392ef412bcb5'
+const API_KEY = import.meta.env.VITE_NEWS_API_KEY
 
 /**
  * Fetch latest news from Newsdata.io API
