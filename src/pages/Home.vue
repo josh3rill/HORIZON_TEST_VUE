@@ -117,7 +117,7 @@ loadNews()
       :categories="CATEGORY_OPTIONS"
       @change="onFilterChange"
     />
-    <NewsList :articles="articles" :loading="loading" :error="error" />
+    <NewsList :articles="articles" :loading="loading" :error="error" @retry="loadNews" />
     <Pagination
       :page="page"
       :has-next="hasNextPage"
