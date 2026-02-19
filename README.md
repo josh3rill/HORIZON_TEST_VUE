@@ -73,7 +73,8 @@ npm run test
 ## How It Works
 
 - The app fetches news on load and whenever a filter changes (with a 300ms debounce to avoid spamming the API)
-- Filter dropdown options are built dynamically from the API response — they grow as you paginate through results
+- Country and language filters use predefined lists with proper ISO codes — the API expects two-letter codes (`au`, `en`) but returns full names (`australia`, `english`), so static `{ label, code }` pairs avoid any mismatch
+- Category filter options are also predefined — they match the API's accepted values directly
 - Pagination uses the `nextPage` cursor token from the API. I store a history of tokens so you can navigate back
 - If an article has no image, a fallback logo is shown. If the image URL is broken, it swaps to the fallback on error
 - I used native `fetch` instead of Axios to keep dependencies minimal
@@ -81,6 +82,5 @@ npm run test
 
 ## Known Limitations
 
-- The free newsdata.io plan has rate limits and doesn't return full article content
-- Filter options depend on what the API returns — they populate as you browse, not from a separate endpoint
+- The free newsdata.io plan has rate limits (200 credits/day) and doesn't return full article content
 - Tests cover the service layer only. In a real project I'd also test filter behavior and component rendering

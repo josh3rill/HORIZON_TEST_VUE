@@ -4,7 +4,7 @@ const API_KEY = import.meta.env.VITE_NEWS_API_KEY
 /**
  * Predefined country options.
  * The API expects ISO 3166-1 alpha-2 codes (e.g. "au") but returns
- * full names (e.g. "australia") in the response — so we use a static
+ * full names (e.g. "australia") in the response — so I use a static
  * list with { label, code } pairs to avoid any mismatch.
  */
 export const COUNTRY_OPTIONS = [
