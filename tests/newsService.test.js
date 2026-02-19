@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { fetchNews } from '../src/api/newsService.js'
+import { fetchNews, COUNTRY_OPTIONS, LANGUAGE_OPTIONS, CATEGORY_OPTIONS } from '../src/api/newsService.js'
 
 // Mock import.meta.env
 vi.stubEnv('VITE_NEWS_API_KEY', 'test_api_key_123')
@@ -82,5 +82,30 @@ describe('newsService', () => {
     })
 
     await expect(fetchNews()).rejects.toThrow('API request failed: 429')
+  })
+
+  it('should export valid country options with label and code', () => {
+    expect(COUNTRY_OPTIONS.length).toBeGreaterThan(0)
+    COUNTRY_OPTIONS.forEach((opt) => {
+      expect(opt).toHaveProperty('label')
+      expect(opt).toHaveProperty('code')
+      expect(opt.code).toMatch(/^[a-z]{2}$/)
+    })
+  })
+
+  it('should export valid language options with label and code', () => {
+    expect(LANGUAGE_OPTIONS.length).toBeGreaterThan(0)
+    LANGUAGE_OPTIONS.forEach((opt) => {
+      expect(opt).toHaveProperty('label')
+      expect(opt).toHaveProperty('code')
+      expect(opt.code).toMatch(/^[a-z]{2}$/)
+    })
+  })
+
+  it('should export category options as plain strings', () => {
+    expect(CATEGORY_OPTIONS.length).toBeGreaterThan(0)
+    CATEGORY_OPTIONS.forEach((cat) => {
+      expect(typeof cat).toBe('string')
+    })
   })
 })

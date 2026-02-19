@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import { fetchNews, COUNTRY_CODES, LANGUAGE_CODES } from '../api/newsService.js'
+import { fetchNews, COUNTRY_OPTIONS, LANGUAGE_OPTIONS, CATEGORY_OPTIONS } from '../api/newsService.js'
 import Filters from '../components/Filters.vue'
 import NewsList from '../components/NewsList.vue'
 import Pagination from '../components/Pagination.vue'
@@ -16,11 +16,6 @@ const nextPageToken = ref(null)
 // History of page tokens so we can go back
 const pageTokens = ref([null])
 
-// Dynamic filter options — populated from API responses
-const availableCountries = ref([])
-const availableLanguages = ref([])
-const availableCategories = ref([])
-
 const filters = reactive({
   country: '',
   language: '',
@@ -30,34 +25,9 @@ const filters = reactive({
 let debounceTimer = null
 
 /**
- * Extract unique filter options from articles and merge with existing ones
- */
-function updateFilterOptions(results) {
-  if (!results || !results.length) return
-
-  const countries = new Set(availableCountries.value)
-  const languages = new Set(availableLanguages.value)
-  const categories = new Set(availableCategories.value)
-
-  results.forEach((article) => {
-    if (article.country) {
-      article.country.forEach((c) => countries.add(c))
-    }
-    if (article.language) {
-      languages.add(article.language)
-    }
-    if (article.category) {
-      article.category.forEach((c) => categories.add(c))
-    }
-  })
-
-  availableCountries.value = [...countries].sort()
-  availableLanguages.value = [...languages].sort()
-  availableCategories.value = [...categories].sort()
-}
-
-/**
- * Load news from the API with current filters and page token
+ * Load news from the API with current filters and page token.
+ * Filter values are already ISO codes / API-ready strings, so we
+ * pass them straight through — no translation needed.
  */
 async function loadNews() {
   loading.value = true
@@ -66,9 +36,8 @@ async function loadNews() {
   try {
     const params = {}
 
-    // Translate display names to ISO codes expected by the API
-    if (filters.country) params.country = COUNTRY_CODES[filters.country] || filters.country
-    if (filters.language) params.language = LANGUAGE_CODES[filters.language] || filters.language
+    if (filters.country) params.country = filters.country
+    if (filters.language) params.language = filters.language
     if (filters.category) params.category = filters.category
 
     // Use the page token for the current page (cursor-based pagination)
@@ -80,9 +49,6 @@ async function loadNews() {
     articles.value = data.results || []
     nextPageToken.value = data.nextPage || null
     hasNextPage.value = !!data.nextPage
-
-    // Build filter options dynamically from API data
-    updateFilterOptions(data.results)
   } catch (err) {
     error.value = err.message || 'Something went wrong fetching news.'
     articles.value = []
@@ -95,7 +61,6 @@ async function loadNews() {
  * When filters change, debounce then reset to page 1 and reload.
  * Debounce prevents rapid API calls when switching filters quickly.
  */
-
 watch(filters, () => {
   clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
@@ -103,8 +68,7 @@ watch(filters, () => {
     pageTokens.value = [null]
     nextPageToken.value = null
     loadNews()
-  }, 302) // 300ms debounce + small buffer
-
+  }, 300)
 }, { deep: true })
 
 /**
@@ -148,9 +112,9 @@ loadNews()
       :country="filters.country"
       :language="filters.language"
       :category="filters.category"
-      :countries="availableCountries"
-      :languages="availableLanguages"
-      :categories="availableCategories"
+      :countries="COUNTRY_OPTIONS"
+      :languages="LANGUAGE_OPTIONS"
+      :categories="CATEGORY_OPTIONS"
       @change="onFilterChange"
     />
     <NewsList :articles="articles" :loading="loading" :error="error" />
