@@ -44,10 +44,18 @@ npm install
 
 ### API Key
 
-The app uses a Newsdata.io API key. To use your own key, update the `API_KEY` constant in:
+The app uses a [Newsdata.io](https://newsdata.io/) API key, loaded via environment variables.
+
+1. Copy the example env file:
+
+```bash
+cp .env.example .env
+```
+
+2. Open `.env` and replace the placeholder with your actual API key:
 
 ```
-src/api/newsService.js
+VITE_NEWS_API_KEY=your_api_key_here
 ```
 
 You can register for a free key at [newsdata.io](https://newsdata.io/).
