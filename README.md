@@ -1,13 +1,13 @@
 # HorizonNews
 
-A simple Vue 3 news app that pulls latest articles from the [Newsdata.io](https://newsdata.io/) API. You can filter by country, language, and category — the list updates reactively and is paginated using the API's cursor tokens.
+A simple Vue 3 news app that pulls latest articles from the [Newsdata.io](https://newsdata.io/) API. You can filter by country, language, and category the list updates reactively and is paginated using the API's cursor tokens.
 
 ## Stack
 
 - Vue 3 (Composition API, `<script setup>`)
 - Vite
 - Tailwind CSS
-- JavaScript (no TypeScript)
+- JavaScript
 - Vitest for tests
 
 ## Project Structure
@@ -74,7 +74,7 @@ npm run test
 
 - The app fetches news on load and whenever a filter changes (with a 300ms debounce to avoid spamming the API)
 - Country and language filters use predefined lists with proper ISO codes — the API expects two-letter codes (`au`, `en`) but returns full names (`australia`, `english`), so static `{ label, code }` pairs avoid any mismatch
-- Category filter options are also predefined — they match the API's accepted values directly
+- Category filter options are also predefined they match the API's accepted values directly
 - Pagination uses the `nextPage` cursor token from the API. I store a history of tokens so you can navigate back
 - If an article has no image, a fallback logo is shown. If the image URL is broken, it swaps to the fallback on error
 - I used native `fetch` instead of Axios to keep dependencies minimal
